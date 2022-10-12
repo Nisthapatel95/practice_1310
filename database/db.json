@@ -1,0 +1,20 @@
+{
+    "company":[
+        {
+            "id":1,
+            "name":"1Rivet LLP"
+        },
+        {
+            "id":2,
+            "name":"SRK consulting group LLC"
+        },
+        {
+            "id":3,
+            "name":"Sharpnet Technology Pvt Ltd"
+        },
+        {
+            "id":4,
+            "name":"Megabytes Tech"
+        }
+    ]
+}
