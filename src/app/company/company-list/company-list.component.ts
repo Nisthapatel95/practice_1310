@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { Company } from '../model/company.model';
+import { CompanyService } from '../Service/company.service';
 
 @Component({
   selector: 'app-company-list',
@@ -7,11 +9,17 @@ import { Company } from '../model/company.model';
   styleUrls: ['./company-list.component.scss']
 })
 export class CompanyListComponent implements OnInit {
+  @Output() companyId: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() companyList: Company[]
 
-  constructor() { this.companyList = [] }
+  constructor(private router: Router, private CompanyService: CompanyService) { this.companyList = [] }
 
   ngOnInit(): void {
+  }
+
+  getCompanyDetail(company: Company) {
+    this.router.navigate([`company/${company.id}`])
+    this.CompanyService.sendCompanyId(company.id)
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Company } from '../model/company.model';
 
 @Injectable({
@@ -11,6 +11,9 @@ export class CompanyService {
 
   baseUrl: string = 'http://localhost:3000';
 
+  selectedId: Subject<number> = new Subject();
+  companyDetails: Subject<Company> = new Subject();
+
 
   constructor(private http: HttpClient) {
 
@@ -19,8 +22,33 @@ export class CompanyService {
     return this.http.get<Company[]>(`${this.baseUrl}/company`);
   }
 
-  addCompany(companydetail: Company): Observable<Company> {
-    return this.http.post<Company>(`${this.baseUrl}/company/add`, companydetail);
+  addCompany(companydetail: Company) {
+    debugger
+    return this.http.post<Company>(`${this.baseUrl}/company`, companydetail);
+  }
+
+  getCompanyById(id: number): Observable<Company> {
+    // debugger
+    return this.http.get<Company>(`${this.baseUrl}/company/${id}`);
+  }
+
+  //subject
+
+  sendCompanyId(id:number){
+    this.selectedId.next(id);
+  }
+
+  getCompanyId(): Observable<number>{
+    return this.selectedId.asObservable()
+  }
+
+  //for details subhject
+  sendcompanyDetails(id:Company){
+    this.companyDetails.next(id);
+  }
+
+  getcompanyDetails(): Observable<Company>{
+    return this.companyDetails.asObservable()
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Company } from '../model/company.model';
 import { CompanyService } from '../Service/company.service';
@@ -10,8 +10,12 @@ import { CompanyService } from '../Service/company.service';
 })
 export class CompanyFormComponent implements OnInit {
 
+  @Output() companyDetail:EventEmitter<Company>=new EventEmitter<Company>()
+  @Output() companyDetailToEdit:EventEmitter<Company>=new EventEmitter<Company>()
+
   companyForm: FormGroup;
   companyToEdit: Company;
+
 
   @Input() set companyEdit(value: Company) {
     if (value) {
@@ -34,14 +38,21 @@ export class CompanyFormComponent implements OnInit {
       name: [null, [Validators.required, Validators.minLength(1)]],
       description: [null, [Validators.required, Validators.minLength(1)]],
     });
+    this.companyService.getcompanyDetails().subscribe((res)=>{
+      if (res) {
+        this.companyForm.patchValue(res)
+      }
+    })
   }
 
   saveCompany() {
+    debugger
     if (this.companyForm.valid) {
       if (this.companyForm.value.id) {
-
+        this.companyDetailToEdit.emit(this.companyForm.value)
+        
       } else {
-
+        this.companyDetail.emit(this.companyForm.value)
       }
       this.companyForm.reset()
     }
